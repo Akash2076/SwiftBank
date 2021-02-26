@@ -101,6 +101,8 @@ var bankAcc: [BankAccount] = [
     SalaryAccount(accNo: 001, accBalance: 125_000, employer: "Google", monthlySalary: 15_000)
 ]
 
+var accs: Accounts = Accounts(salAcc: SalaryAccount(accNo: 001, accBalance: 125_000, employer: "Google", monthlySalary: 15_000))
+
 // var myCust: Customer
 if let path = URL.createFolder(folderName: "SwiftBank") {
     let filePath = path.appendingPathComponent("BankData.json")
@@ -114,7 +116,7 @@ if let path = URL.createFolder(folderName: "SwiftBank") {
         }
     } catch {}
     
-    cust.accounts = bankAcc
+    cust.accounts = accs
     let jsonStr = getJsonString(of: cust)
     do {
         try jsonStr.write(to: filePath, atomically: true, encoding: .utf8)
