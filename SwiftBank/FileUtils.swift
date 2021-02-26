@@ -7,8 +7,11 @@
 
 import Foundation
 
+let bankDirectoryName = "SwiftBank"
+let bankFileName = "BankData.json"
+
 extension URL {
-    static func createFolder(folderName: String) -> URL? {
+    static func getOrCreateFolder(folderName: String) -> URL? {
         let fileManager = FileManager.default
         // Get document directory for device, this should succeed
         if let documentDirectory = fileManager.urls(for: .documentDirectory,
@@ -23,7 +26,6 @@ extension URL {
                     try fileManager.createDirectory(atPath: folderURL.path,
                                                     withIntermediateDirectories: true,
                                                     attributes: nil)
-                    // try fileManager.createFile(atPath: folderURL.path, contents: nil)
                 } catch {
                     // Creation failed. Print error & return nil
                     print(error.localizedDescription)
@@ -36,6 +38,15 @@ extension URL {
         // Will only be called if document directory not found
         return nil
     }
+}
+
+// this will be called at initialization of the program
+func getSavedData() -> (cust: Customer?, isFirstTime: Bool) {
+    if let customer = readJsonFile() {
+        return (customer, false)
+    }
+
+    return (nil, true)
 }
 
 // converting object to string
@@ -52,32 +63,34 @@ func getJsonString(of obj: Customer) -> String {
     return ""
 }
 
-func saveJsonFile(of data: String) {
-    if let documentDirectory = FileManager.default.urls(for: .documentDirectory,
-                                                        in: .userDomainMask).first
-    {
-        let pathWithFilename = documentDirectory.appendingPathComponent("myJsonString.json")
-        print(pathWithFilename) // this is thet path where our file will be stored
+func saveJsonFile(of jsonString: String) {
+    if let path = URL.getOrCreateFolder(folderName: bankDirectoryName) {
+        let filePath = path.appendingPathComponent(bankFileName)
+        print("saving data at: \(filePath)")
+
         do {
-            try data.write(to: pathWithFilename, atomically: true, encoding: .utf8)
+            try jsonString.write(to: filePath, atomically: true, encoding: .utf8)
         } catch {
-            // Handle error
+            print("error writing json")
         }
     }
 }
 
-func read() -> Customer? {
-    if let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-        let url = documentDirectory.appendingPathComponent("BankData.json")
-        let data = NSData(contentsOf: url)
+func readJsonFile() -> Customer? {
+    if let path = URL.getOrCreateFolder(folderName: bankDirectoryName) {
+        let filePath = path.appendingPathComponent(bankFileName)
+        let data = NSData(contentsOf: filePath)
 
         do {
             // converting data to object(i.e Product in our case)
             if let payload = data as Data? {
-                let product = try JSONDecoder().decode(Customer.self, from: payload)
-                return product
+                cust = try JSONDecoder().decode(Customer.self, from: payload)
+                return cust
             }
-        } catch {}
+        } catch {
+            print("error reading json")
+        }
     }
+
     return nil
 }

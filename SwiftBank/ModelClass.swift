@@ -23,7 +23,6 @@ class Customer: Codable {
         
         // self.accounts = []
     }
-    
     func addBankAccounts(accs: Accounts) {
         accounts = accs
     }
@@ -57,7 +56,6 @@ class BankAccount: Codable {
         case accountNo
         case accountBalance
     }
-    
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(accountNo, forKey: .accountNo)
@@ -66,11 +64,9 @@ class BankAccount: Codable {
     
     
     // Functions for transactions
-    
     func addBalance(amountToAdd: Double) -> Double {
         return accountBalance + amountToAdd
     }
-    
     func deductBalance(amountToDeduct: Double) -> Double {
         return accountBalance - amountToDeduct
     }
@@ -98,7 +94,6 @@ class SalaryAccount: BankAccount {
         try container.encode(employer, forKey: .employer)
         try container.encode(monthlySalary, forKey: .monthlySalary)
     }
-    
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         employer = try container.decode(String.self, forKey: .employer)
@@ -138,7 +133,6 @@ class SavingsAccount: BankAccount {
         try container.encode(minBalance, forKey: .minBalance)
         try container.encode(interestRate, forKey: .interestRate)
     }
-    
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         minBalance = try container.decode(Double.self, forKey: .minBalance)
@@ -173,7 +167,6 @@ class FixedDepositAccount: BankAccount {
         try container.encode(maturityDate, forKey: .maturityDate)
         try container.encode(termDuration, forKey: .termDuration)
     }
-    
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         depositAmount = try container.decode(Double.self, forKey: .depositAmount)
