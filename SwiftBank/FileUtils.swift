@@ -41,7 +41,7 @@ extension URL {
 }
 
 // this will be called at initialization of the program
-func getSavedData() -> (cust: Customer?, isFirstTime: Bool) {
+func getSavedData() -> (cust: Customers?, isFirstTime: Bool) {
     if let customer = readJsonFile() {
         return (customer, false)
     }
@@ -50,7 +50,7 @@ func getSavedData() -> (cust: Customer?, isFirstTime: Bool) {
 }
 
 // converting object to string
-func getJsonString(of obj: Customer) -> String {
+func getJsonString(of obj: Customers) -> String {
     do {
         let jsonEncoder = JSONEncoder()
         jsonEncoder.outputFormatting = [.prettyPrinted]
@@ -76,7 +76,7 @@ func saveJsonFile(of jsonString: String) {
     }
 }
 
-func readJsonFile() -> Customer? {
+func readJsonFile() -> Customers? {
     if let path = URL.getOrCreateFolder(folderName: bankDirectoryName) {
         let filePath = path.appendingPathComponent(bankFileName)
         let data = NSData(contentsOf: filePath)
@@ -84,7 +84,7 @@ func readJsonFile() -> Customer? {
         do {
             // converting data to object(i.e Product in our case)
             if let payload = data as Data? {
-                cust = try JSONDecoder().decode(Customer.self, from: payload)
+                let cust = try JSONDecoder().decode(Customers.self, from: payload)
                 return cust
             }
         } catch {

@@ -7,7 +7,15 @@
 
 import Foundation
 
-class Customer: Codable {
+class Customers: Codable {
+    var customers: [CustomerDetails]
+    
+    init(custs: [CustomerDetails]) {
+        self.customers = custs
+    }
+}
+
+class CustomerDetails: Codable {
     var name: String
     var contactNo: String
     var address: String

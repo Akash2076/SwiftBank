@@ -8,7 +8,7 @@
 import Foundation
 
 
-
+// var customers: 
 
 
 //var cust = Customer(name: "Keval", contactNo: "7021989791", address: "Bhavnagar", password: "123")
