@@ -8,7 +8,11 @@
 import Foundation
 
 
-// var customers: 
+var savedData = getSavedData()
+if savedData.isFirstTime {
+    // ask user to enter new customer
+}
+
 
 
 //var cust = Customer(name: "Keval", contactNo: "7021989791", address: "Bhavnagar", password: "123")
