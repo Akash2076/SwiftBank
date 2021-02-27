@@ -12,7 +12,6 @@ let savingMinBal = Double(100)
 let savingIntRate = Double(6)
 let fdIntRate = Double(9)
 
-
 func registerMultipleUsers() -> [CustomerDetails] {
     var customers = [CustomerDetails]()
     var again = false
@@ -20,7 +19,8 @@ func registerMultipleUsers() -> [CustomerDetails] {
         customers.append(registerUser())
         print("Would you like to register more user? y/n")
         again = readLine()! == "y"
-    } while(again)
+    }
+    while again
     
     return customers
 }
@@ -44,11 +44,9 @@ func registerUser() -> CustomerDetails {
 }
 
 func letAddBankAccounts() -> Accounts {
-    
     let bankAccounts = Accounts()
     
-    repeat{
-        
+    repeat {
         print("Which account would you like to open?\n1 - Salary account\n2 - Saving account\n3 - Fixed Deposit account")
         let choice = Int(readLine()!)!
         
@@ -74,17 +72,16 @@ func letAddBankAccounts() -> Accounts {
         }
         
         print("Would you like to add more bank account? y/n")
-        
-    } while(readLine()! == "y")
+    }
+    while readLine()! == "y"
     
     return bankAccounts
-    
 }
 
 func customerLogin() -> CustomerDetails? {
     var customer: CustomerDetails?
     var again = false
-    repeat{
+    repeat {
         customer = tryLogin()
         if let cust = customer {
             print("Welcome \(cust.name)")
@@ -94,8 +91,8 @@ func customerLogin() -> CustomerDetails? {
             print("Incorrect name or password. Would you like to try again? y/n")
             again = readLine()! == "y"
         }
-        
-    } while(again)
+    }
+    while again
     
     return customer
 }
@@ -108,7 +105,7 @@ func tryLogin() -> CustomerDetails? {
     
     if let custs = customers?.customers {
         for cust in custs {
-            if cust.name == name && cust.password == pass {
+            if cust.name == name, cust.password == pass {
                 // code to login
                 return cust
             }
@@ -116,7 +113,6 @@ func tryLogin() -> CustomerDetails? {
     }
     return nil
 }
-
 
 // creating bank account related functions
 func generateNextAccountNumber() -> String {
@@ -176,8 +172,8 @@ func createSavingAcc() -> SavingsAccount {
             print("Please enter amount more than \(savingMinBal)")
             rep = true
         }
-    } while(rep)
-    
+    }
+    while rep
     
     return SavingsAccount(accNo: accNo, accBalance: accBal, minBal: savingMinBal, intRate: savingIntRate)
 }
