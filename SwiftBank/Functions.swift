@@ -271,3 +271,73 @@ func depositMoney(accs: Accounts?, money: Double) {
     }
 }
 
+func drawMoney(accs: Accounts?, money: Double) {
+    if let accounts = accs {
+        
+        var salAcc: SalaryAccount?
+        var savAcc: SavingsAccount?
+        var fdAcc: FixedDepositAccount?
+        
+        var str = "From which account would you like to draw money?\n"
+        if let _salAcc = accounts.salaryAcc {
+            str += "1 - Salary Account\n"
+            salAcc = _salAcc
+        }
+        
+        if let _savAcc = accounts.savingsAcc {
+            str += "2 - Savings Account\n"
+            savAcc = _savAcc
+        }
+        
+        if let _fdAcc = accounts.fixedDepositAcc {
+            str += "3 - Fixed Deposit Account\n"
+            fdAcc = _fdAcc
+        }
+        
+        str += "press 0 to go back to previous menu"
+        
+        var userChoice = -1
+        repeat {
+            
+            print(str)
+            userChoice = Int(readLine()!)!
+            
+            switch userChoice {
+                case 0: // go back to previous menu
+                    print("")
+                    
+                case 1: // salary account
+                    if let _salAcc = salAcc {
+                        if _salAcc.accountBalance > money {
+                            print("You withdraw \(money) amount.")
+                            print("new balance in salary account is \(_salAcc.deductBalance(amountToDeduct: money))")
+                        }
+                    }
+                    
+                case 2: // savings account
+                    if let _savAcc = savAcc {
+                        if _savAcc.accountBalance > money {
+                            print("You withdraw \(money) amount.")
+                            print("new balance in savings account is \(_savAcc.deductBalance(amountToDeduct: money))")
+                        }
+                    }
+                    
+                case 3: // FD account
+                    if let _fdAcc = fdAcc {
+                        if _fdAcc.accountBalance > money {
+                            print("You withdraw \(money) amount.")
+                            print("new balance in Fixed Deposit account is \(_fdAcc.deductBalance(amountToDeduct: money))")
+                        }
+                    }
+                    
+                default:
+                    print("Invalid input. please try again")
+                    userChoice = -1
+            }
+            
+        } while(userChoice == -1)
+        
+        
+    }
+}
+

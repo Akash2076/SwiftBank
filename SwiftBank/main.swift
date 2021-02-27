@@ -88,7 +88,10 @@ repeat {
             userChoice = -1
 
         case 3: // draw money
-            print("")
+            print("Please enter the amount to draw: ")
+            let amount = Double(readLine()!)!
+            drawMoney(accs: loggedInCustomer!.accounts, money: amount)
+            userChoice = -1
 
         case 4: // transfer moeny to other bank accounts
             print("")
