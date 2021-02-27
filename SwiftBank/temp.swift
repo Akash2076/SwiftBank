@@ -23,3 +23,8 @@ import Foundation
 //saveJsonFile(of: getJsonString(of: cust))
 //
 //
+
+//func abc() {
+//    _ = Accounts()
+//    _ = SalaryAccount()
+//}

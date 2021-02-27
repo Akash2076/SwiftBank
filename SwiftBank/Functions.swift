@@ -11,6 +11,7 @@ import Foundation
 let savingMinBal = Double(100)
 let savingIntRate = Double(6)
 let fdIntRate = Double(9)
+var lastAccountNumber = 0
 
 func registerMultipleUsers() -> [CustomerDetails] {
     var customers = [CustomerDetails]()
@@ -55,27 +56,27 @@ func letAddBankAccounts(accs: Accounts? = nil) -> Accounts {
         let choice = Int(readLine()!)!
 
         switch choice {
-        case 1:
-            // open salary account
-            let salAcc = createSalaryAcc()
-            bankAccounts.salaryAcc = salAcc
+            case 1:
+                // open salary account
+                let salAcc = createSalaryAcc()
+                bankAccounts.salaryAcc = salAcc
 
-        case 2:
-            // open saving account
-            let savAcc = createSavingAcc()
-            bankAccounts.savingsAcc = savAcc
+            case 2:
+                // open saving account
+                let savAcc = createSavingAcc()
+                bankAccounts.savingsAcc = savAcc
 
-        case 3:
-            // open fixed deposit account
-            let fdAcc = createFdAcc()
-            bankAccounts.fixedDepositAcc = fdAcc
+            case 3:
+                // open fixed deposit account
+                let fdAcc = createFdAcc()
+                bankAccounts.fixedDepositAcc = fdAcc
 
-        default:
-            // wrong choice
-            print("Sorry, incorrect input.")
+            default:
+                // wrong choice
+                print("Sorry, incorrect input.\n")
         }
 
-        print("Would you like to add more bank account? y/n")
+        print("\nWould you like to add more bank account? y/n")
     }
     while readLine()! == "y"
 
@@ -208,7 +209,7 @@ func updateLoggedInCustomer(cust: CustomerDetails) {
 
 func generateNextAccountNumber() -> String {
     var accNo = 0
-    var lastAccNo = 0
+    var lastAccNo = lastAccountNumber
     let savedData = getSavedData()
     if savedData.isFirstTime {
         accNo = Int(String(format: "%03d", 1))!
@@ -234,6 +235,7 @@ func generateNextAccountNumber() -> String {
         }
     }
     accNo = lastAccNo + 1
+    lastAccountNumber = accNo
     return String(format: "%03d", accNo)
 }
 

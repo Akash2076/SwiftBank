@@ -9,8 +9,9 @@ import Foundation
 
 var customers: Customers?
 var loggedInCustomer: CustomerDetails?
-
 var savedData = getSavedData()
+
+
 if savedData.isFirstTime {
     print("\nWelcome to Swift Bank. Please register yourself to get started")
     loggedInCustomer = registerUser()
@@ -23,7 +24,7 @@ if savedData.isFirstTime {
     }
 
     saveJsonFile(of: jsonStr)
-    
+    showAndPerformTransactions()
 }
 else {
     customers = savedData.cust
