@@ -94,7 +94,8 @@ repeat {
             userChoice = -1
 
         case 4: // transfer moeny to other bank accounts
-            print("")
+            transferMoney(accs: loggedInCustomer!.accounts)
+            userChoice = -1
 
         case 5: // pay utility bills
             print("")

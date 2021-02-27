@@ -114,6 +114,31 @@ func tryLogin() -> CustomerDetails? {
     return nil
 }
 
+func getAvailableAccountNumbers() -> [String] {
+    var accNos = [String]()
+    
+    if let allCusts = customers {
+        
+        for cust in allCusts.customers {
+            if let _salAcc = cust.accounts?.salaryAcc {
+                accNos.append(_salAcc.accountNo)
+            }
+            
+            if let _savAcc = cust.accounts?.savingsAcc {
+                accNos.append(_savAcc.accountNo)
+            }
+            
+            if let _fdAcc = cust.accounts?.fixedDepositAcc {
+                accNos.append(_fdAcc.accountNo)
+            }
+        }
+        
+    }
+    
+    return accNos
+}
+
+
 // creating bank account related functions
 
 func generateNextAccountNumber() -> String {
@@ -339,5 +364,126 @@ func drawMoney(accs: Accounts?, money: Double) {
         
         
     }
+}
+
+func transferMoney(accs: Accounts?) {
+    if let accounts = accs {
+        
+        var salAcc: SalaryAccount?
+        var savAcc: SavingsAccount?
+        var fdAcc: FixedDepositAccount?
+        
+        var str = "From which account would you like to transfer?\n"
+        if let _salAcc = accounts.salaryAcc {
+            str += "1 - Salary Account\n"
+            salAcc = _salAcc
+        }
+        
+        if let _savAcc = accounts.savingsAcc {
+            str += "2 - Savings Account\n"
+            savAcc = _savAcc
+        }
+        
+        if let _fdAcc = accounts.fixedDepositAcc {
+            str += "3 - Fixed Deposit Account\n"
+            fdAcc = _fdAcc
+        }
+        
+        str += "press 0 to go back to previous menu"
+        
+        var userChoice = -1
+        repeat {
+            
+            print(str)
+            userChoice = Int(readLine()!)!
+            
+            switch userChoice {
+                case 0: // go back to previous menu
+                    print("")
+                    
+                case 1: // salary account
+                    if let _salAcc = salAcc {
+                        print("You have \(String(format: "%.2f", _salAcc.accountBalance)) amount in your Salary account.\nHow much money would you like to transfer?")
+                        let money = Double(readLine()!)!
+                        
+                        if money < _salAcc.accountBalance {
+                            addToBeneficiary(money: money)
+                            let amount = _salAcc.deductBalance(amountToDeduct: money)
+                            print("New balance in \(loggedInCustomer!.name)'s salary account is \(amount)")
+                            print("Transfer Successful !")
+                        }
+                        
+                    }
+                    
+                case 2: // savings account
+                    if let _savAcc = savAcc {
+                        print("You have \(String(format: "%.2f", _savAcc.accountBalance)) amount in your Salary account.\nHow much money would you like to transfer?")
+                        let money = Double(readLine()!)!
+                        
+                        if money < _savAcc.accountBalance {
+                            addToBeneficiary(money: money)
+                            let amount = _savAcc.deductBalance(amountToDeduct: money)
+                            print("New balance in \(loggedInCustomer!.name)'s salary account is \(amount)")
+                            print("Transfer Successful !")
+                        }
+                    }
+                    
+                case 3: // FD account
+                    if let _fdAcc = fdAcc {
+                        print("You have \(String(format: "%.2f", _fdAcc.accountBalance)) amount in your Salary account.\nHow much money would you like to transfer?")
+                        let money = Double(readLine()!)!
+                        
+                        if money < _fdAcc.accountBalance {
+                            addToBeneficiary(money: money)
+                            let amount = _fdAcc.deductBalance(amountToDeduct: money)
+                            print("New balance in \(loggedInCustomer!.name)'s salary account is \(amount)")
+                            print("Transfer Successful !")
+                        }
+                    }
+                    
+                default:
+                    print("Invalid input. please try again")
+                    userChoice = -1
+            }
+            
+        } while(userChoice == -1)
+        
+    }
+}
+
+func addToBeneficiary(money: Double) {
+    
+    print("Enter the account number in which you would like to transfer money.")
+    print("Available account numbers are: \(getAvailableAccountNumbers())")
+    let accToTransfer = readLine()!
+    
+    for item in customers!.customers {
+        
+        if let acc = item.accounts?.salaryAcc {
+            if acc.accountNo == accToTransfer {
+                let amount = acc.addBalance(amountToAdd: money)
+                print("New balance in \(item.name)'s salary account is: \(amount)")
+                break
+            }
+        }
+        
+        if let acc = item.accounts?.savingsAcc {
+            if acc.accountNo == accToTransfer {
+                let amount = acc.addBalance(amountToAdd: money)
+                print("New balance in \(item.name)'s savings account is: \(amount)")
+                break
+            }
+        }
+        
+        if let acc = item.accounts?.fixedDepositAcc {
+            if acc.accountNo == accToTransfer {
+                let amount = acc.addBalance(amountToAdd: money)
+                print("New balance in \(item.name)'s fixed deposit account is: \(amount)")
+                break
+            }
+        }
+        
+    }
+    
 }
 
