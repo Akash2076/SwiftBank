@@ -28,15 +28,18 @@ if savedData.isFirstTime {
 else {
     customers = savedData.cust
     
-    // todo: show main menu
-    print("\nWelcome to Swift Bank. What would you like to do?")
+    // show main menu
+    print("\nWelcome to Swift Bank. What would you like to do today?")
     
     var userChoice = -1
     repeat {
-        print("1 - Register new user\n2 - Login existing user\nTo perform transactions, you need to login")
+        print("1 - Register new user\n2 - Login existing user\n0 - Exit\nTo perform transactions, you need to login")
         userChoice = Int(readLine()!)!
         
         switch userChoice {
+            case 0:
+                print("Thank you for using Swift Bank. See you next time! Bye..")
+                
             case 1:
                 let users = registerMultipleUsers()
                 for user in users {
@@ -49,17 +52,18 @@ else {
                 }
 
                 saveJsonFile(of: jsonStr)
+                userChoice = -1
                 
             case 2:
                 loggedInCustomer = customerLogin()
+                if let _ = loggedInCustomer {
+                    showAndPerformTransactions()
+                    userChoice = -1
+                }
                 
             default:
                 print("Please enter valid choice.")
                 userChoice = -1
-        }
-        
-        if loggedInCustomer == nil {
-            userChoice = -1
         }
         
     } while(userChoice == -1)
@@ -70,50 +74,5 @@ else {
 // Show the transactions menu
 // showTransactionsMenu()
 
-var userChoice = -1
-repeat {
-    
-    print(Constants.transactionMenu)
-    userChoice = Int(readLine()!)!
-    
-    switch userChoice {
-        case 1: // Display current balance
-            displayBalance(accs: loggedInCustomer!.accounts)
-            userChoice = -1     // set -1 to again show the transaction menu
 
-        case 2: // Deposit money
-            print("Please add the amount to deposit: ")
-            let amount = Double(readLine()!)!
-            depositMoney(accs: loggedInCustomer!.accounts, money: amount)
-            userChoice = -1
-
-        case 3: // draw money
-            print("Please enter the amount to draw: ")
-            let amount = Double(readLine()!)!
-            drawMoney(accs: loggedInCustomer!.accounts, money: amount)
-            userChoice = -1
-
-        case 4: // transfer moeny to other bank accounts
-            transferMoney(accs: loggedInCustomer!.accounts)
-            userChoice = -1
-
-        case 5: // pay utility bills
-            print("")
-
-        case 6: // add new bank account
-            print("")
-
-        case 7: // show or change customer details
-            print("")
-
-        case 8: // logout (go back to previous menu)
-            print("")
-
-        default:
-            print("Incorrect input. Please enter valid action number")
-            userChoice = -1
-    }
-    
-    print("\n")     // just adding a line break to pretify the command line
-} while(userChoice == -1)
 

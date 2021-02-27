@@ -43,8 +43,12 @@ func registerUser() -> CustomerDetails {
     return customer
 }
 
-func letAddBankAccounts() -> Accounts {
-    let bankAccounts = Accounts()
+func letAddBankAccounts(accs: Accounts? = nil) -> Accounts {
+    
+    var bankAccounts = Accounts()
+    if let _bankAccounts = accs {
+        bankAccounts = _bankAccounts
+    }
 
     repeat {
         print("Which account would you like to open?\n1 - Salary account\n2 - Saving account\n3 - Fixed Deposit account")
@@ -138,6 +142,67 @@ func getAvailableAccountNumbers() -> [String] {
     return accNos
 }
 
+func showOrEditCustDetails(cust: CustomerDetails) -> CustomerDetails {
+    
+    print("Below are the customer details. Enter the number associated with the detil, to change that detail.")
+    print("1 - Customer name: \(cust.name)\n2 - Customer contact number: \(cust.contactNo)\n3 - Customer address/city: \(cust.address)\n4 - Customer password: \(cust.password)\n0 - Go back to previous menu")
+    
+    var userChoice = -1
+    repeat{
+        
+        userChoice = Int(readLine()!)!
+        switch userChoice {
+        
+            case 0: // go back go previous menu
+                print("")
+                
+            case 1: // change customer name
+                print("Please enter new name: ")
+                if let name = readLine() {
+                    cust.name = name
+                }
+                
+            case 2: // change contact no
+                print("Please enter new contact number: ")
+                if let contactNo = readLine() {
+                    cust.contactNo = contactNo
+                }
+                
+            case 3: // change address/city
+                print("Please enter new address/city: ")
+                if let addressCity = readLine() {
+                    cust.address = addressCity
+                }
+                
+            case 4: // change password
+                print("Please enter new password: ")
+                if let pass = readLine() {
+                    cust.password = pass
+                }
+                
+            default:
+                print("Invalid input. Please enter valid number again.")
+                userChoice = -1
+            
+        }
+        
+        
+    } while(userChoice == -1)
+    
+    return cust
+}
+
+func updateLoggedInCustomer(cust: CustomerDetails) {
+    
+    for i in 0..<customers!.customers.count {
+        if customers!.customers[i].name == cust.name {
+            customers!.customers[i] = cust
+        }
+    }
+    
+    saveJsonFile(of: getJsonString(of: customers!))
+    
+}
 
 // creating bank account related functions
 
@@ -146,7 +211,7 @@ func generateNextAccountNumber() -> String {
     var lastAccNo = 0
     let savedData = getSavedData()
     if savedData.isFirstTime {
-        accNo = Int(String(format: "%02d", 1))!
+        accNo = Int(String(format: "%03d", 1))!
     }
     else {
         let cust = savedData.cust
@@ -155,19 +220,21 @@ func generateNextAccountNumber() -> String {
                 lastAccNo = Int(fd.accountNo)!
             }
         }
-        else if let sal = cust!.customers.last!.accounts!.salaryAcc {
+        
+        if let sal = cust!.customers.last!.accounts!.salaryAcc {
             if Int(sal.accountNo)! > lastAccNo {
                 lastAccNo = Int(sal.accountNo)!
             }
         }
-        else if let sav = cust!.customers.last!.accounts!.savingsAcc {
+        
+        if let sav = cust!.customers.last!.accounts!.savingsAcc {
             if Int(sav.accountNo)! > lastAccNo {
                 lastAccNo = Int(sav.accountNo)!
             }
         }
     }
     accNo = lastAccNo + 1
-    return String(format: "%02d", accNo)
+    return String(format: "%03d", accNo)
 }
 
 func createSalaryAcc() -> SalaryAccount {
@@ -217,10 +284,6 @@ func createFdAcc() -> FixedDepositAccount {
 }
 
 // functions regarding transactions
-
-func showTransactionsMenu() {
-    
-}
 
 func displayBalance(accs: Accounts?) {
     if let accounts = accs {
@@ -487,3 +550,59 @@ func addToBeneficiary(money: Double) {
     
 }
 
+
+// IMPORTANT - This function is to perform all the transactions
+// for logged in customer
+func showAndPerformTransactions() {
+    var userChoice = -1
+    repeat {
+        
+        print(Constants.transactionMenu)
+        userChoice = Int(readLine()!)!
+        
+        switch userChoice {
+            case 0: // logout (go back to previous menu)
+                loggedInCustomer = nil
+                print("Logout successful")
+        
+            case 1: // Display current balance
+                displayBalance(accs: loggedInCustomer!.accounts)
+                userChoice = -1     // set -1 to again show the transaction menu
+
+            case 2: // Deposit money
+                print("Please add the amount to deposit: ")
+                let amount = Double(readLine()!)!
+                depositMoney(accs: loggedInCustomer!.accounts, money: amount)
+                userChoice = -1
+
+            case 3: // draw money
+                print("Please enter the amount to draw: ")
+                let amount = Double(readLine()!)!
+                drawMoney(accs: loggedInCustomer!.accounts, money: amount)
+                userChoice = -1
+
+            case 4: // transfer moeny to other bank accounts
+                transferMoney(accs: loggedInCustomer!.accounts)
+                userChoice = -1
+
+            case 5: // pay utility bills
+                print("")
+
+            case 6: // add new bank account
+                let accounts = loggedInCustomer!.accounts
+                loggedInCustomer!.addBankAccounts(accs: letAddBankAccounts(accs: accounts))
+                userChoice = -1
+
+            case 7: // show or change customer details
+                loggedInCustomer = showOrEditCustDetails(cust: loggedInCustomer!)
+                userChoice = -1
+
+            default:
+                print("Incorrect input. Please enter valid action number")
+                userChoice = -1
+        }
+        
+        print("\n")     // just adding a line break to pretify the command line
+    } while(userChoice == -1)
+
+}
