@@ -482,26 +482,26 @@ func transferMoney(accs: Accounts?) {
                     
                 case 2: // savings account
                     if let _savAcc = savAcc {
-                        print("You have \(String(format: "%.2f", _savAcc.accountBalance)) amount in your Salary account.\nHow much money would you like to transfer?")
+                        print("You have \(String(format: "%.2f", _savAcc.accountBalance)) amount in your Savings account.\nHow much money would you like to transfer?")
                         let money = Double(readLine()!)!
                         
                         if money < _savAcc.accountBalance {
                             addToBeneficiary(money: money)
                             let amount = _savAcc.deductBalance(amountToDeduct: money)
-                            print("New balance in \(loggedInCustomer!.name)'s salary account is \(amount)")
+                            print("New balance in \(loggedInCustomer!.name)'s Savings account is \(amount)")
                             print("Transfer Successful !")
                         }
                     }
                     
                 case 3: // FD account
                     if let _fdAcc = fdAcc {
-                        print("You have \(String(format: "%.2f", _fdAcc.accountBalance)) amount in your Salary account.\nHow much money would you like to transfer?")
+                        print("You have \(String(format: "%.2f", _fdAcc.accountBalance)) amount in your Fixed Diposit account.\nHow much money would you like to transfer?")
                         let money = Double(readLine()!)!
                         
                         if money < _fdAcc.accountBalance {
                             addToBeneficiary(money: money)
                             let amount = _fdAcc.deductBalance(amountToDeduct: money)
-                            print("New balance in \(loggedInCustomer!.name)'s salary account is \(amount)")
+                            print("New balance in \(loggedInCustomer!.name)'s Fixed Deposit account is \(amount)")
                             print("Transfer Successful !")
                         }
                     }
@@ -575,16 +575,22 @@ func showAndPerformTransactions() {
                 print("Please add the amount to deposit: ")
                 let amount = Double(readLine()!)!
                 depositMoney(accs: loggedInCustomer!.accounts, money: amount)
+                
+                updateData()
                 userChoice = -1
 
             case 3: // draw money
                 print("Please enter the amount to draw: ")
                 let amount = Double(readLine()!)!
                 drawMoney(accs: loggedInCustomer!.accounts, money: amount)
+                
+                updateData()
                 userChoice = -1
 
             case 4: // transfer moeny to other bank accounts
                 transferMoney(accs: loggedInCustomer!.accounts)
+                
+                updateData()
                 userChoice = -1
 
             case 5: // pay utility bills
@@ -593,10 +599,14 @@ func showAndPerformTransactions() {
             case 6: // add new bank account
                 let accounts = loggedInCustomer!.accounts
                 loggedInCustomer!.addBankAccounts(accs: letAddBankAccounts(accs: accounts))
+                
+                updateData()
                 userChoice = -1
 
             case 7: // show or change customer details
                 loggedInCustomer = showOrEditCustDetails(cust: loggedInCustomer!)
+                
+                updateData()
                 userChoice = -1
 
             default:
@@ -607,4 +617,17 @@ func showAndPerformTransactions() {
         print("\n")     // just adding a line break to pretify the command line
     } while(userChoice == -1)
 
+}
+
+func updateData() {
+    var jsonStr = ""
+    for i in 0..<customers!.customers.count {
+        if customers!.customers[i].name == loggedInCustomer!.name {
+            customers!.customers[i] = loggedInCustomer!
+        }
+    }
+    
+    jsonStr = getJsonString(of: customers!)
+    
+    saveJsonFile(of: jsonStr)
 }
