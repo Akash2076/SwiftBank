@@ -51,24 +51,24 @@ func letAddBankAccounts() -> Accounts {
         let choice = Int(readLine()!)!
 
         switch choice {
-            case 1:
-                // open salary account
-                let salAcc = createSalaryAcc()
-                bankAccounts.salaryAcc = salAcc
+        case 1:
+            // open salary account
+            let salAcc = createSalaryAcc()
+            bankAccounts.salaryAcc = salAcc
 
-            case 2:
-                // open saving account
-                let savAcc = createSavingAcc()
-                bankAccounts.SavingsAcc = savAcc
+        case 2:
+            // open saving account
+            let savAcc = createSavingAcc()
+            bankAccounts.savingsAcc = savAcc
 
-            case 3:
-                // open fixed deposit account
-                let fdAcc = createFdAcc()
-                bankAccounts.FixedDepositAcc = fdAcc
+        case 3:
+            // open fixed deposit account
+            let fdAcc = createFdAcc()
+            bankAccounts.fixedDepositAcc = fdAcc
 
-            default:
-                // wrong choice
-                print("Sorry, incorrect input.")
+        default:
+            // wrong choice
+            print("Sorry, incorrect input.")
         }
 
         print("Would you like to add more bank account? y/n")
@@ -125,7 +125,7 @@ func generateNextAccountNumber() -> String {
     }
     else {
         let cust = savedData.cust
-        if let fd = cust!.customers.last!.accounts!.FixedDepositAcc {
+        if let fd = cust!.customers.last!.accounts!.fixedDepositAcc {
             if Int(fd.accountNo)! > lastAccNo {
                 lastAccNo = Int(fd.accountNo)!
             }
@@ -135,7 +135,7 @@ func generateNextAccountNumber() -> String {
                 lastAccNo = Int(sal.accountNo)!
             }
         }
-        else if let sav = cust!.customers.last!.accounts!.SavingsAcc {
+        else if let sav = cust!.customers.last!.accounts!.savingsAcc {
             if Int(sav.accountNo)! > lastAccNo {
                 lastAccNo = Int(sav.accountNo)!
             }
@@ -194,5 +194,80 @@ func createFdAcc() -> FixedDepositAccount {
 // functions regarding transactions
 
 func showTransactionsMenu() {
-    print(Constants.transactionMenu)
+    
 }
+
+func displayBalance(accs: Accounts?) {
+    if let accounts = accs {
+        if let salAcc = accounts.salaryAcc {
+            print("Balance in salary account is: \(String(format: "%.2f", salAcc.accountBalance))")
+        }
+        
+        if let savAcc = accounts.savingsAcc {
+            print("Balance in savings account is: \(String(format: "%.2f", savAcc.accountBalance))")
+        }
+        
+        if let fdAcc = accounts.fixedDepositAcc {
+            print("Balance in Fixed Deposit account is: \(String(format: "%.2f", fdAcc.accountBalance))")
+        }
+        
+    }
+}
+
+func depositMoney(accs: Accounts?, money: Double) {
+    if let accounts = accs {
+        
+        var salAcc: SalaryAccount?
+        var savAcc: SavingsAccount?
+        var fdAcc: FixedDepositAccount?
+        
+        var str = "In which account would you like to deposit?\n"
+        if let _salAcc = accounts.salaryAcc {
+            str += "1 - Salary Account\n"
+            salAcc = _salAcc
+        }
+        
+        if let _savAcc = accounts.savingsAcc {
+            str += "2 - Savings Account\n"
+            savAcc = _savAcc
+        }
+        
+        if let _fdAcc = accounts.fixedDepositAcc {
+            str += "3 - Fixed Deposit Account\n"
+            fdAcc = _fdAcc
+        }
+        
+        str += "press 0 to go back to previous menu"
+        
+        var userChoice = -1
+        repeat {
+            
+            print(str)
+            userChoice = Int(readLine()!)!
+            
+            switch userChoice {
+                case 0: // go back to previous menu
+                    print("")
+                    
+                case 1: // salary account
+                    let newBal = salAcc?.addBalance(amountToAdd: money)
+                    print("new balance in salary account is: \(String(describing: newBal))")
+                    
+                case 2: // savings account
+                    let newBal = savAcc?.addBalance(amountToAdd: money)
+                    print("new balance in savings account is: \(String(describing: newBal))")
+                    
+                case 3: // FD account
+                    let newBal = fdAcc?.addBalance(amountToAdd: money)
+                    print("new balance in Fixed Deposit account is: \(String(describing: newBal))")
+                    
+                default:
+                    print("Invalid input. please try again")
+                    userChoice = -1
+            }
+            
+        } while(userChoice == -1)
+        
+    }
+}
+

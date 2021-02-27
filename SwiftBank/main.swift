@@ -68,4 +68,48 @@ else {
 
 // When the user reaches here, it means we have a logged in customer
 // Show the transactions menu
-showTransactionsMenu()
+// showTransactionsMenu()
+
+var userChoice = -1
+repeat {
+    
+    print(Constants.transactionMenu)
+    userChoice = Int(readLine()!)!
+    
+    switch userChoice {
+        case 1: // Display current balance
+            displayBalance(accs: loggedInCustomer!.accounts)
+            userChoice = -1     // set -1 to again show the transaction menu
+
+        case 2: // Deposit money
+            print("Please add the amount to deposit: ")
+            let amount = Double(readLine()!)!
+            depositMoney(accs: loggedInCustomer!.accounts, money: amount)
+            userChoice = -1
+
+        case 3: // draw money
+            print("")
+
+        case 4: // transfer moeny to other bank accounts
+            print("")
+
+        case 5: // pay utility bills
+            print("")
+
+        case 6: // add new bank account
+            print("")
+
+        case 7: // show or change customer details
+            print("")
+
+        case 8: // logout (go back to previous menu)
+            print("")
+
+        default:
+            print("Incorrect input. Please enter valid action number")
+            userChoice = -1
+    }
+    
+    print("\n")     // just adding a line break to pretify the command line
+} while(userChoice == -1)
+

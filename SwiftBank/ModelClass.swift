@@ -38,13 +38,13 @@ class CustomerDetails: Codable {
 
 class Accounts: Codable {
     var salaryAcc: SalaryAccount?
-    var SavingsAcc: SavingsAccount?
-    var FixedDepositAcc: FixedDepositAccount?
+    var savingsAcc: SavingsAccount?
+    var fixedDepositAcc: FixedDepositAccount?
     
     init(salAcc: SalaryAccount? = nil, savAcc: SavingsAccount? = nil, fixAcc: FixedDepositAccount? = nil) {
         self.salaryAcc = salAcc
-        self.SavingsAcc = savAcc
-        self.FixedDepositAcc = fixAcc
+        self.savingsAcc = savAcc
+        self.fixedDepositAcc = fixAcc
     }
 }
 
@@ -73,10 +73,12 @@ class BankAccount: Codable {
     
     // Functions for transactions
     func addBalance(amountToAdd: Double) -> Double {
-        return accountBalance + amountToAdd
+        accountBalance += amountToAdd
+        return accountBalance
     }
     func deductBalance(amountToDeduct: Double) -> Double {
-        return accountBalance - amountToDeduct
+        accountBalance -= amountToDeduct
+        return accountBalance
     }
 }
 
@@ -181,5 +183,5 @@ class FixedDepositAccount: BankAccount {
 
 
 class Constants {
-    static let transactionMenu = "Enter the number associated with the action, to perform that action.\n1 - Display current balance\n2 - Deposit money\n3 - Draw money\n4 - Transfer money to other bank account\n5 - Pay utility bills\n6 - Add new bank account\n\n7 - Show or Change customer details\n8 - Logout "
+    static let transactionMenu = "Enter the number associated with the action, to perform that action.\n1 - Display current balance\n2 - Deposit money\n3 - Draw money\n4 - Transfer money to other bank account\n5 - Pay utility bills\n6 - Add new bank account\n7 - Show or Change customer details\n8 - Logout (go back to previous menu)"
 }
