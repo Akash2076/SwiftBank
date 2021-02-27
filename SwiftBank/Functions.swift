@@ -21,6 +21,8 @@ func registerMultipleUsers() -> [CustomerDetails] {
         print("Would you like to register more user? y/n")
         again = readLine()! == "y"
     } while(again)
+    
+    return customers
 }
 
 func registerUser() -> CustomerDetails {
