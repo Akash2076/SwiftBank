@@ -13,10 +13,17 @@ let savingIntRate = Double(6)
 let fdIntRate = Double(9)
 
 
+func registerMultipleUsers() -> [CustomerDetails] {
+    var customers = [CustomerDetails]()
+    var again = false
+    repeat {
+        customers.append(registerUser())
+        print("Would you like to register more user? y/n")
+        again = readLine()! == "y"
+    } while(again)
+}
 
 func registerUser() -> CustomerDetails {
-    print("\nWelcome to Swift Bank. Please register yourself to get started")
-    
     print("Enter your name: ")
     let name = readLine()!
     print("Set your password: ")
@@ -26,7 +33,12 @@ func registerUser() -> CustomerDetails {
     print("Enter your address/city: ")
     let address = readLine()!
     
-    return CustomerDetails(name: name, contactNo: contactNo, address: address, password: pass)
+    let customer = CustomerDetails(name: name, contactNo: contactNo, address: address, password: pass)
+    customer.addBankAccounts(accs: letAddBankAccounts())
+    
+    print("Registration successful.")
+    
+    return customer
 }
 
 func letAddBankAccounts() -> Accounts {
@@ -67,6 +79,44 @@ func letAddBankAccounts() -> Accounts {
     
 }
 
+func customerLogin() -> CustomerDetails? {
+    var customer: CustomerDetails?
+    var again = false
+    repeat{
+        customer = tryLogin()
+        if let cust = customer {
+            print("Welcome \(cust.name)")
+            again = false
+        }
+        else {
+            print("Incorrect name or password. Would you like to try again? y/n")
+            again = readLine()! == "y"
+        }
+        
+    } while(again)
+    
+    return customer
+}
+
+func tryLogin() -> CustomerDetails? {
+    print("Enter your name:")
+    let name = readLine()!
+    print("Enter your password:")
+    let pass = readLine()!
+    
+    if let custs = customers?.customers {
+        for cust in custs {
+            if cust.name == name && cust.password == pass {
+                // code to login
+                return cust
+            }
+        }
+    }
+    return nil
+}
+
+
+// creating bank account related functions
 func generateNextAccountNumber() -> String {
     var accNo = 0
     var lastAccNo = 0
