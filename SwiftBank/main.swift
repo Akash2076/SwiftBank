@@ -14,6 +14,7 @@ var savedData = getSavedData()
 if savedData.isFirstTime {
     print("\nWelcome to Swift Bank. Please register yourself to get started")
     loggedInCustomer = registerUser()
+    print("Welcome \(loggedInCustomer!.name)")
 
     customers = Customers(custs: [loggedInCustomer!])
     var jsonStr = ""
@@ -67,4 +68,4 @@ else {
 
 // When the user reaches here, it means we have a logged in customer
 // Show the transactions menu
-
+showTransactionsMenu()

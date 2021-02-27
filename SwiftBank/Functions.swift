@@ -21,7 +21,7 @@ func registerMultipleUsers() -> [CustomerDetails] {
         again = readLine()! == "y"
     }
     while again
-    
+
     return customers
 }
 
@@ -34,47 +34,47 @@ func registerUser() -> CustomerDetails {
     let contactNo = readLine()!
     print("Enter your address/city: ")
     let address = readLine()!
-    
+
     let customer = CustomerDetails(name: name, contactNo: contactNo, address: address, password: pass)
     customer.addBankAccounts(accs: letAddBankAccounts())
-    
+
     print("Registration successful.")
-    
+
     return customer
 }
 
 func letAddBankAccounts() -> Accounts {
     let bankAccounts = Accounts()
-    
+
     repeat {
         print("Which account would you like to open?\n1 - Salary account\n2 - Saving account\n3 - Fixed Deposit account")
         let choice = Int(readLine()!)!
-        
+
         switch choice {
             case 1:
                 // open salary account
                 let salAcc = createSalaryAcc()
                 bankAccounts.salaryAcc = salAcc
-                
+
             case 2:
                 // open saving account
                 let savAcc = createSavingAcc()
                 bankAccounts.SavingsAcc = savAcc
-        
+
             case 3:
                 // open fixed deposit account
                 let fdAcc = createFdAcc()
                 bankAccounts.FixedDepositAcc = fdAcc
-        
+
             default:
                 // wrong choice
                 print("Sorry, incorrect input.")
         }
-        
+
         print("Would you like to add more bank account? y/n")
     }
     while readLine()! == "y"
-    
+
     return bankAccounts
 }
 
@@ -93,7 +93,7 @@ func customerLogin() -> CustomerDetails? {
         }
     }
     while again
-    
+
     return customer
 }
 
@@ -102,10 +102,10 @@ func tryLogin() -> CustomerDetails? {
     let name = readLine()!
     print("Enter your password:")
     let pass = readLine()!
-    
+
     if let custs = customers?.customers {
         for cust in custs {
-            if cust.name == name, cust.password == pass {
+            if cust.name.lowercased() == name.lowercased(), cust.password.lowercased() == pass.lowercased() {
                 // code to login
                 return cust
             }
@@ -115,6 +115,7 @@ func tryLogin() -> CustomerDetails? {
 }
 
 // creating bank account related functions
+
 func generateNextAccountNumber() -> String {
     var accNo = 0
     var lastAccNo = 0
@@ -152,14 +153,14 @@ func createSalaryAcc() -> SalaryAccount {
     let employer = readLine()!
     print("Enter your monthly salary: ")
     let monthlySal = Double(readLine()!)!
-    
+
     return SalaryAccount(accNo: accNo, accBalance: accBal, employer: employer, monthlySalary: monthlySal)
 }
 
 func createSavingAcc() -> SavingsAccount {
     let accNo = generateNextAccountNumber()
     print("Minimum balance you need to maintain is: \(savingMinBal)\nAnd interest rate is: \(savingIntRate)%")
-    
+
     var accBal = Double(0)
     var rep = false
     repeat {
@@ -174,7 +175,7 @@ func createSavingAcc() -> SavingsAccount {
         }
     }
     while rep
-    
+
     return SavingsAccount(accNo: accNo, accBalance: accBal, minBal: savingMinBal, intRate: savingIntRate)
 }
 
@@ -184,8 +185,14 @@ func createFdAcc() -> FixedDepositAccount {
     let accBal = Double(readLine()!)!
     print("Enter the number of months as term duration for FD: ")
     let termDur = Int(readLine()!)!
-    
+
     print("Interest rate for Fixed Deposit is \(fdIntRate)%")
-    
+
     return FixedDepositAccount(accNo: accNo, accBalance: accBal, termDur: termDur, intRate: fdIntRate)
+}
+
+// functions regarding transactions
+
+func showTransactionsMenu() {
+    print(Constants.transactionMenu)
 }
