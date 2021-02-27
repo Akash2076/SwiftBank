@@ -70,6 +70,7 @@ func saveJsonFile(of jsonString: String) {
 
         do {
             try jsonString.write(to: filePath, atomically: true, encoding: .utf8)
+            print("details saved")
         } catch {
             print("error writing json")
         }

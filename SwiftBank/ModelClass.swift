@@ -49,10 +49,10 @@ class Accounts: Codable {
 }
 
 class BankAccount: Codable {
-    var accountNo: Int
+    var accountNo: String
     var accountBalance: Double
     
-    init(accNo: Int, accBalance: Double) {
+    init(accNo: String, accBalance: Double) {
         self.accountNo = accNo
         self.accountBalance = accBalance
     }
@@ -84,7 +84,7 @@ class SalaryAccount: BankAccount {
     var employer: String
     var monthlySalary: Double
     
-    init(accNo: Int, accBalance: Double, employer: String, monthlySalary: Double) {
+    init(accNo: String, accBalance: Double, employer: String, monthlySalary: Double) {
         self.employer = employer
         self.monthlySalary = monthlySalary
         
@@ -123,7 +123,7 @@ class SavingsAccount: BankAccount {
     var minBalance: Double
     var interestRate: Double
     
-    init(accNo: Int, accBalance: Double, minBal: Double, intRate: Double) {
+    init(accNo: String, accBalance: Double, minBal: Double, intRate: Double) {
         self.minBalance = minBal
         self.interestRate = intRate
         
@@ -150,36 +150,31 @@ class SavingsAccount: BankAccount {
 }
 
 class FixedDepositAccount: BankAccount {
-    var depositAmount: Double
-    var maturityDate: Date
     var termDuration: Int
+    var interestRate: Double
     
-    init(accNo: Int, accBalance: Double, depoAmount: Double, matDate: Date, termDur: Int) {
-        self.depositAmount = depoAmount
-        self.maturityDate = matDate
+    init(accNo: String, accBalance: Double, termDur: Int, intRate: Double) {
         self.termDuration = termDur
+        self.interestRate = intRate
         
         super.init(accNo: accNo, accBalance: accBalance)
     }
     
     private enum CodingKeys: String, CodingKey {
-        case depositAmount
-        case maturityDate
         case termDuration
+        case interestRate
     }
     
     override func encode(to encoder: Encoder) throws {
         try super.encode(to: encoder)
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(depositAmount, forKey: .depositAmount)
-        try container.encode(maturityDate, forKey: .maturityDate)
         try container.encode(termDuration, forKey: .termDuration)
+        try container.encode(interestRate, forKey: .interestRate)
     }
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        depositAmount = try container.decode(Double.self, forKey: .depositAmount)
-        maturityDate = try container.decode(Date.self, forKey: .maturityDate)
         termDuration = try container.decode(Int.self, forKey: .termDuration)
+        interestRate = try container.decode(Double.self, forKey: .interestRate)
         try super.init(from: decoder)
     }
 }
