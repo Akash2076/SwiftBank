@@ -552,6 +552,91 @@ func addToBeneficiary(money: Double) {
     
 }
 
+enum UtilityBills: String {
+    case electricityBill = "Electricity Bill"
+    case creditCardBill = "Credit card Bill"
+}
+
+func processUtilityPayment(utilityType: UtilityBills, accName: String, acc: BankAccount) {
+    print("Available balance in your \(accName) is \(acc.accountBalance). Enter the amount of bill you'd like to pay:")
+    
+    var again = false
+    repeat {
+        let billAmount = Double(readLine()!)!
+        if billAmount < acc.accountBalance {
+            print("You have successfully paid your \(utilityType.rawValue).")
+            print("new balance in your salary account is \(acc.deductBalance(amountToDeduct: billAmount))")
+            
+            again = false
+        }
+        else {
+            print("You only have \(acc.accountBalance) amount in your bank, please enter less amount than that:")
+            again = true
+        }
+    } while(again)
+}
+
+func payUtilityBills(accs: Accounts?, utilityType: UtilityBills) {
+    if let accounts = accs {
+        
+        var salAcc: SalaryAccount?
+        var savAcc: SavingsAccount?
+        var fdAcc: FixedDepositAccount?
+        
+        var str = "From which account would you like to pay your \(utilityType.rawValue)?\n"
+        
+        if let _salAcc = accounts.salaryAcc {
+            str += "1 - Salary Account\n"
+            salAcc = _salAcc
+        }
+        
+        if let _savAcc = accounts.savingsAcc {
+            str += "2 - Savings Account\n"
+            savAcc = _savAcc
+        }
+        
+        if let _fdAcc = accounts.fixedDepositAcc {
+            str += "3 - Fixed Deposit Account\n"
+            fdAcc = _fdAcc
+        }
+        
+        str += "press 0 to go back to previous menu"
+        
+        var userChoice = -1
+        repeat {
+            
+            print(str)
+            userChoice = Int(readLine()!)!
+            
+            switch userChoice {
+                case 0: // go back to previous menu
+                    print("")
+                    
+                case 1: // salary account
+                    if let _salAcc = salAcc {
+                        processUtilityPayment(utilityType: utilityType, accName: "Salary account", acc: _salAcc)
+                    }
+                    
+                case 2: // savings account
+                    if let _savAcc = savAcc {
+                        processUtilityPayment(utilityType: utilityType, accName: "Savings account", acc: _savAcc)
+                    }
+                    
+                case 3: // FD account
+                    if let _fdAcc = fdAcc {
+                        processUtilityPayment(utilityType: utilityType, accName: "Fixed Diposit account", acc: _fdAcc)
+                    }
+                    
+                default:
+                    print("Invalid input. please try again")
+                    userChoice = -1
+            }
+            
+        } while(userChoice == -1)
+        
+    }
+}
+
 
 // IMPORTANT - This function is to perform all the transactions
 // for logged in customer
@@ -593,17 +678,26 @@ func showAndPerformTransactions() {
                 updateData()
                 userChoice = -1
 
-            case 5: // pay utility bills
-                print("")
+            case 5: // pay electricity bills
+                payUtilityBills(accs: loggedInCustomer!.accounts, utilityType: UtilityBills.electricityBill)
+                
+                updateData()
+                userChoice = -1
+                
+            case 6: // pay credit card bills
+                payUtilityBills(accs: loggedInCustomer!.accounts, utilityType: UtilityBills.creditCardBill)
+                
+                updateData()
+                userChoice = -1
 
-            case 6: // add new bank account
+            case 7: // add new bank account
                 let accounts = loggedInCustomer!.accounts
                 loggedInCustomer!.addBankAccounts(accs: letAddBankAccounts(accs: accounts))
                 
                 updateData()
                 userChoice = -1
 
-            case 7: // show or change customer details
+            case 8: // show or change customer details
                 loggedInCustomer = showOrEditCustDetails(cust: loggedInCustomer!)
                 
                 updateData()

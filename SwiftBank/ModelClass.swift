@@ -183,5 +183,5 @@ class FixedDepositAccount: BankAccount {
 
 
 class Constants {
-    static let transactionMenu = "Enter the number associated with the action, to perform that action.\n1 - Display current balance\n2 - Deposit money\n3 - Draw money\n4 - Transfer money to other bank account\n5 - Pay utility bills\n6 - Add new bank account\n7 - Show or Change customer details\n0 - Logout (go back to previous menu)"
+    static let transactionMenu = "Enter the number associated with the action, to perform that action.\n1 - Display current balance\n2 - Deposit money\n3 - Draw money\n4 - Transfer money to other bank account\n5 - Pay Electricity bill\n6 - Pay Credit card bill\n7 - Add new bank account\n8 - Show or Change customer details\n0 - Logout (go back to previous menu)"
 }
