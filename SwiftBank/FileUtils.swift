@@ -56,7 +56,7 @@ func getJsonString(of obj: Customers) -> String {
         jsonEncoder.outputFormatting = [.prettyPrinted]
         let jsonData = try jsonEncoder.encode(obj)
         if let json = String(data: jsonData, encoding: String.Encoding.utf8) {
-            print(json)
+            // print(json)
             return json
         }
     } catch {}
