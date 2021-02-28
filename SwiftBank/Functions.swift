@@ -725,3 +725,9 @@ func updateData() {
     
     saveJsonFile(of: jsonStr)
 }
+
+// for development purpose
+func showJson() {
+    let json = getJsonString(of: customers!)
+    print(json)
+}

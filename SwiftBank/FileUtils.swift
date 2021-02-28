@@ -84,8 +84,8 @@ func readJsonFile() -> Customers? {
 
         do {
             // converting data to object(i.e Product in our case)
-            if let payload = data as Data? {
-                let cust = try JSONDecoder().decode(Customers.self, from: payload)
+            if let dataJson = data as Data? {
+                let cust = try JSONDecoder().decode(Customers.self, from: dataJson)
                 return cust
             }
         } catch {
