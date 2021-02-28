@@ -100,5 +100,5 @@ repeat {
             userChoice = -1
     }
     
-} while(userChoice == -1)
+} while(userChoice == -1)   // check userChoice condition
 
