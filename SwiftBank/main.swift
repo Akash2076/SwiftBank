@@ -51,7 +51,7 @@ print("\nWelcome to Swift Bank. What would you like to do today?")
 // loop if user enters invalid action digit
 var userChoice = -1
 repeat {
-    print("1 - Register new user\n2 - Login existing user\n0 - Exit\nTo perform transactions, you need to login")
+    print("1 - Register new user\n2 - Login existing user\n0 - Exit\n9 - Show saved data\nnote:To perform transactions, you need to login")
     userChoice = Int(readLine()!)!
     
     // switch to check user input action
