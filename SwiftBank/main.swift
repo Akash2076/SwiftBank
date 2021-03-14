@@ -46,6 +46,7 @@ else {
 // and we have not nil 'customers' object
 
 // Show main menu
+print("Akash")
 print("\nWelcome to Swift Bank. What would you like to do today?")
 
 // loop if user enters invalid action digit
